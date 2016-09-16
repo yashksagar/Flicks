@@ -17,6 +17,35 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *vcNowPlaying = [storyboard instantiateViewControllerWithIdentifier:@"NavigationController"];
+    UIViewController *vcTopRated = [storyboard instantiateViewControllerWithIdentifier:@"NavigationController"];
+
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    tabBarController.viewControllers = @[vcNowPlaying, vcTopRated];
+    
+    // custom styles for tab bar
+    [tabBarController.tabBar setTintColor:[UIColor colorWithRed:255/255.0f green:230/255.0f blue:66/255.0f alpha:1]];
+    [tabBarController.tabBar setAlpha:0.92];
+    [tabBarController.tabBar setBarTintColor:[UIColor colorWithWhite:0.0 alpha:0.9]];
+    UITabBarItem *nowPlaying = [tabBarController.tabBar.items objectAtIndex:0];
+    UITabBarItem *topRated = [tabBarController.tabBar.items objectAtIndex:1];
+    
+    // adjust title position
+    [[UITabBarItem appearance] setTitlePositionAdjustment:UIOffsetMake(0, -2)];
+    
+    // customize tab items
+    [nowPlaying setTitle:@"Now Playing"];
+    [nowPlaying setImage:[UIImage imageNamed:@"playing"]];
+    
+    [topRated setTitle:@"Top Rated"];
+    [topRated setImage:[UIImage imageNamed:@"star"]];
+
+    
+    self.window.rootViewController = tabBarController;
+    
     return YES;
 }
 
