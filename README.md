@@ -31,6 +31,13 @@ Here's a walkthrough of implemented user stories:
 
 ![flicks-ios-2](https://github.com/yashksagar/Flicks/blob/master/flicks-ios-2.gif)
 
+***
+
+GIF walkthrough for network error:
+
+![flicks-ios-error-1](https://github.com/yashksagar/Flicks/blob/master/flicks-ios-error-1.gif)
+
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
