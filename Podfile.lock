@@ -21,15 +21,18 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - MBProgressHUD (1.0.0)
+  - XCDYouTubeKit (2.5.3)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.6)
   - MBProgressHUD
+  - XCDYouTubeKit (~> 2.5)
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  XCDYouTubeKit: 90690f9e3523735dc93b8024269d991b0cfffe78
 
-PODFILE CHECKSUM: 9c5c6c934fb4e9942a5ea33785d970be03ec8bd7
+PODFILE CHECKSUM: 28dc49aa05a88451bdfd16f09b7ba1acb0e1cba2
 
 COCOAPODS: 1.0.1

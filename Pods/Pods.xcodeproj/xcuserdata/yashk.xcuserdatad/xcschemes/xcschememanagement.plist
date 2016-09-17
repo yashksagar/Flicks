@@ -19,20 +19,30 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>XCDYouTubeKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>12DE619E83821B2FE21D7334FB0F0DB1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>410B25DF16EA5C5B3E2698F74F9625FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D058B89EB3B3DF45457A2DCD3971AFFE</key>
+		<key>97D8471567BC572371EA6DA8FA5BC979</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D05E7D9CCE0FF641AAD5A77EAFE9C111</key>
+		<key>D058B89EB3B3DF45457A2DCD3971AFFE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
