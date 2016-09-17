@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		522415412229F890294389E0 /* libPods-Flicks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F83C9E3BE1692D682B143087 /* libPods-Flicks.a */; };
+		73A6A5331D8CA9ED00E5B7F9 /* TrailerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73A6A5321D8CA9ED00E5B7F9 /* TrailerViewController.m */; };
 		73B598081D8B3A53007ED5DC /* MovieCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 73B598071D8B3A53007ED5DC /* MovieCollectionCell.m */; };
 		73FB32421D874FE7008D7F37 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 73FB32411D874FE7008D7F37 /* main.m */; };
 		73FB32451D874FE7008D7F37 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73FB32441D874FE7008D7F37 /* AppDelegate.m */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		73A6A5311D8CA9ED00E5B7F9 /* TrailerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrailerViewController.h; sourceTree = "<group>"; };
+		73A6A5321D8CA9ED00E5B7F9 /* TrailerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrailerViewController.m; sourceTree = "<group>"; };
 		73B598061D8B3A53007ED5DC /* MovieCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieCollectionCell.h; sourceTree = "<group>"; };
 		73B598071D8B3A53007ED5DC /* MovieCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCollectionCell.m; sourceTree = "<group>"; };
 		73FB323D1D874FE7008D7F37 /* Flicks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flicks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +124,8 @@
 				73FB325A1D87512A008D7F37 /* MoviesListViewController.m */,
 				73FB325F1D876382008D7F37 /* MovieInfoViewController.h */,
 				73FB32601D876382008D7F37 /* MovieInfoViewController.m */,
+				73A6A5311D8CA9ED00E5B7F9 /* TrailerViewController.h */,
+				73A6A5321D8CA9ED00E5B7F9 /* TrailerViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -168,6 +173,7 @@
 				TargetAttributes = {
 					73FB323C1D874FE7008D7F37 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 9HCL39QM8Z;
 					};
 				};
 			};
@@ -258,6 +264,7 @@
 				73FB32451D874FE7008D7F37 /* AppDelegate.m in Sources */,
 				73FB32611D876382008D7F37 /* MovieInfoViewController.m in Sources */,
 				73B598081D8B3A53007ED5DC /* MovieCollectionCell.m in Sources */,
+				73A6A5331D8CA9ED00E5B7F9 /* TrailerViewController.m in Sources */,
 				73FB32421D874FE7008D7F37 /* main.m in Sources */,
 				73FB325E1D8756C5008D7F37 /* MovieCell.m in Sources */,
 				73FB325B1D87512A008D7F37 /* MoviesListViewController.m in Sources */,
@@ -375,10 +382,13 @@
 			baseConfigurationReference = 977415A7A10C308F0A6A8D7D /* Pods-Flicks.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Flicks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yashksagar.Flicks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -387,10 +397,13 @@
 			baseConfigurationReference = B3F4F7B4C2033E8A42123931 /* Pods-Flicks.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Flicks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yashksagar.Flicks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

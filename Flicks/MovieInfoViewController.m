@@ -8,6 +8,7 @@
 
 #import "MovieInfoViewController.h"
 #import "UIImageView+AFNetworking.h"
+#import "TrailerViewController.h"
 
 @interface MovieInfoViewController ()
 
@@ -22,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *durationIcon;
 @property (strong, nonatomic) NSArray *videos;
 @property (weak, nonatomic) IBOutlet UIView *trailerIconView;
+
+@property (strong, nonatomic) NSDictionary *trailer;
 
 @end
 
@@ -41,10 +44,10 @@
     CGFloat contentHeight = self.titleLabel.bounds.size.height + self.synopsisLabel.bounds.size.height + self.releaseDateLabel.bounds.size.height + 60;
 
     self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width, contentHeight);
-    [self.scrollView.layer setCornerRadius:6.0f];
+    [self.scrollView.layer setCornerRadius:5.0f];
     
     // off-screen initially
-    self.scrollView.transform = CGAffineTransformTranslate(self.scrollView.transform, 0, 350);
+    self.scrollView.transform = CGAffineTransformTranslate(self.scrollView.transform, 0, 330);
 }
 
 - (void) updateInfo:(NSDictionary *) movie {
@@ -107,7 +110,7 @@
     } completion:^(BOOL finished) {
         // bounce-in scroll view
         [UIView animateWithDuration:0.2 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.scrollView.transform = CGAffineTransformTranslate(self.scrollView.transform, 0, -355);
+            self.scrollView.transform = CGAffineTransformTranslate(self.scrollView.transform, 0, -335);
             // switch to original res image
             [self.bgImageView setImageWithURL:[NSURL URLWithString:imageUrlOriginal]];
         } completion:^(BOOL finished) {
@@ -124,17 +127,29 @@
     if (movie[@"videos"] != (id)[NSNull null] && [movie[@"videos"][@"results"] count] > 0) {
         NSDictionary *video = movie[@"videos"][@"results"][0];
         NSLog(@"trailer ?? %@", video);
+        self.trailer = video;
+
         self.trailerIconView.hidden = NO;
         self.trailerIconView.alpha = 0.0;
-        [self.trailerIconView.layer setCornerRadius:6.0f];
+        [self.trailerIconView.layer setCornerRadius:5.0f];
         [self.trailerIconView.layer setBorderColor:[UIColor colorWithRed:255/255.0f green:230/255.0f blue:66/255.0f alpha:1].CGColor];
         [self.trailerIconView.layer setBorderWidth:2.0f];
         
-        [UIView animateWithDuration:0.3 delay:.3 options:0 animations:^{
+        [UIView animateWithDuration:0.2 delay:.3 options:0 animations:^{
             self.trailerIconView.alpha = 1.0;
         } completion:^(BOOL finished) {}];
     }
 }
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    TrailerViewController *tvc = segue.destinationViewController;
+    
+    tvc.videoId = self.trailer[@"key"];
+    tvc.videoTitle = self.movie[@"title"];
+    tvc.bgImage = self.bgImageView.image;
+}
+
 
 - (void) fetchMovieInfo:id {
     NSString *apiKey = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
@@ -184,10 +199,17 @@
     } completion:^(BOOL finished) {}];
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    self.bgImageView.alpha = 1.0;
+    self.scrollView.alpha = 1.0;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 /*
 #pragma mark - Navigation

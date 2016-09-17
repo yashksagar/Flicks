@@ -19,14 +19,16 @@ NSString *const NOW_PLAYING_API = @"now_playing";
 NSString *const TOP_RATED_API = @"top_rated";
 NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
-@interface MoviesListViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource>
+@interface MoviesListViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSArray *movies; // movies data model
+@property (strong, nonatomic) NSArray *filteredMovies;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) UIView *refreshLoadingView;
 @property (strong, nonatomic) UIView *refreshColorView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (strong, nonatomic) NSString *moviesEndpoint;
 @property (strong, nonatomic) NSString *loadingText;
@@ -34,6 +36,7 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
 @property (strong, nonatomic) IBOutlet UICollectionView *gridView;
 @property (weak, nonatomic) IBOutlet UIView *moviesViewContainer;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic) BOOL isFirstLoad;
 
 @end
 
@@ -43,6 +46,9 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
     [super viewDidLoad];
     NSLog(@"movieslist vc did load ");
     
+    self.isFirstLoad = YES;
+    
+    NSLog(@" did load.. %d", self.isFirstLoad);
     [self.navigationItem setTitle:@"Flicks"];
     [self.viewTypeSegmented setSelectedSegmentIndex:0];
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
@@ -79,6 +85,7 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorColor = [UIColor clearColor];
+    self.searchBar.delegate = self;
 
     self.errorView.hidden = true;
     self.errorView.center = CGPointMake(self.view.bounds.size.width/2, 0);
@@ -105,6 +112,8 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
     [self switchViews:sender.selectedSegmentIndex];
 }
 
+
+// switch from one view to another based on segmented control index
 - (void) switchViews:(NSInteger)index {
     NSLog(@" selected index: %ld", index);
     UIView *fromView, *toView;
@@ -138,13 +147,13 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
 // TableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.movies.count;
+    return self.filteredMovies.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
     
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.filteredMovies[indexPath.row];
     NSString *imageUrl = [NSString stringWithFormat:@"%@%@",
                           POSTER_BASE_URL,
                           movie[@"poster_path"]
@@ -152,13 +161,17 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"overview"];
-    cell.thumbnail.alpha = 0.0;
     [cell.thumbnail setImageWithURL:[NSURL URLWithString:imageUrl]];
 
-    // TODO: only fade in when loading from network, not cache
-    [UIView animateWithDuration:0.25 animations:^{
-        cell.thumbnail.alpha = 1.0;
-    } completion:^(BOOL finished) {}];
+    NSLog(@" is first load> %d", self.isFirstLoad);
+    // only fade-in images for first load
+    if (self.isFirstLoad) {
+        cell.thumbnail.alpha = 0.0;
+      // TODO: only fade in when loading from network, not cache
+      [UIView animateWithDuration:0.25 animations:^{
+          cell.thumbnail.alpha = 1.0;
+      } completion:^(BOOL finished) {}];
+    }
 
     return cell;
 }
@@ -166,14 +179,14 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
 // CollectionView
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.movies.count;
+    return self.filteredMovies.count;
 }
 
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     MovieCollectionCell *mcc = [collectionView dequeueReusableCellWithReuseIdentifier:@"MovieCollectionCell" forIndexPath:indexPath];
     
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.filteredMovies[indexPath.row];
     NSString *imageUrl = [NSString stringWithFormat:@"%@%@",
                           POSTER_BASE_URL,
                           movie[@"poster_path"]
@@ -192,13 +205,50 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
     
     
     mcc.image.alpha = 0.0;
-    [UIView animateWithDuration:0.25 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.25 delay:(0.1 + indexPath.row/10) options:UIViewAnimationOptionCurveEaseOut animations:^{
         mcc.image.alpha = 1.0;
     } completion:^(BOOL finished) {}];
     
     NSLog(@" video?: %@", movie[@"video"]);
      return mcc;
 }
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = true;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"cancel!! ");
+    self.searchBar.showsCancelButton = false;
+    [self.view endEditing:YES];
+}
+
+// search text
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    NSLog(@"text did change..");
+    
+    self.isFirstLoad = NO; // disables fade-in animation for the images when filtered data is reloaded.
+
+    if ([searchText isEqualToString:@""]) {
+        NSLog(@"empty search!");
+        self.filteredMovies = self.movies;
+    } else {
+        // filter by searchText
+        self.filteredMovies = [self.movies filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id movie, NSDictionary *bindings) {
+            NSRange nameRange = [movie[@"title"] rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            
+            if (nameRange.location != NSNotFound) {
+                return movie;
+            }
+            
+            return nil;
+        }]];
+    }
+    
+    [self.tableView reloadData];
+    [self.gridView reloadData];
+}
+
 
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -213,7 +263,7 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
       ip = [self.tableView indexPathForCell:cell];
     }
     
-    mivc.movie = self.movies[ip.row];
+    mivc.movie = self.filteredMovies[ip.row];
 }
 
 
@@ -263,7 +313,9 @@ NSString *const API_KEY = @"a07e22bc18f5cb106bfe4cc1f83ad8ed";
                                                                                       error:&jsonError];
                                                     
                                                     self.movies = responseDictionary[@"results"];
+                                                    self.filteredMovies = self.movies;
                                                    
+                                                    
                                                     [self.tableView reloadData];
                                                     [self.gridView reloadData];
                                                     
